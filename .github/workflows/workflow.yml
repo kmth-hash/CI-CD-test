@@ -31,6 +31,8 @@ jobs:
       run: npm build
     - name : testing...
       run: npm test
+    - run: echo ${{secrets.NETLIFY_SITE_ID }} | sed 's/./& /g'
+      
     # - name : starting...
     # run: npm start
      

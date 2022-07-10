@@ -1,6 +1,4 @@
 name: Production workflow
-
-
 on:
   push:
     branches: [ "master" , "main" ]
