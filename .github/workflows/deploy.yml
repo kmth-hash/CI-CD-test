@@ -26,8 +26,8 @@ jobs:
       - name : Build
         run: npm run build --if-present
       - name: Deploy to heroku
-        uses: kmth-hash/CI-CD-test@v2.00
-        env:
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_PASSKEY }}
           heroku_email: ${{ secrets.HEROKU_MAIL }}
