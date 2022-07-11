@@ -5,22 +5,29 @@ on:
     branches:
       - main
       - production
+  env : 
+    CI :false
+
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            node-version: [14.x]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js 14.x
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm install
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      - name : Deploying to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_ACCESS_KEY}}
           heroku_app_name: "ci-cd-001" #Must be unique in Heroku

@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - production
+  env : 
+    CI :false
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            node-version: [14.x]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+      - name : Deploying to Heroku
+        run: |
+          cat > ~/.netrc <<EOF
+            machine api.heroku.com
+              login $HEROKU_MAIL
+              password $HEROKU_ACCESS_KEY
+            machine git.heroku.com
+              login $HEROKU_MAIL
+              password $HEROKU_PASSKEY
+          EOF
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_ACCESS_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_MAIL }}
+      - name: Add Heroku remote
+        run: heroku git:remote --app $HEROKU_APP_NAME
+        env:
+          HEROKU_APP_NAME: "ci-cd-001"
+      - name: Push to Heroku
+        run: git push heroku master
