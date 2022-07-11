@@ -1,3 +1,11 @@
+name: CustomDeploy
+
+on:
+  push:
+    branches:
+      - main
+      - production
+
 
 jobs:
   custom-deploy:
