@@ -10,6 +10,10 @@ on:
 jobs:
   custom-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -41,4 +45,4 @@ jobs:
         env:
           HEROKU_APP_NAME: "ci-cd-001"
       - name: Push to Heroku
-        run: git push heroku main
+        run: git push git@heroku.com:ci-cd-001.git HEAD:master
