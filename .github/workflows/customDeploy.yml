@@ -1,21 +1,12 @@
-name: Deploy
-on:
-  push:
-    branches:
-      - main
-      - production
-  
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
+jobs:
+  custom-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -23,18 +14,19 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-      - name : Deploying to Heroku
+
+      - name: Heroku login credentials
         run: |
           cat > ~/.netrc <<EOF
             machine api.heroku.com
-              login $HEROKU_MAIL
-              password $HEROKU_ACCESS_KEY
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
             machine git.heroku.com
-              login $HEROKU_MAIL
-              password $HEROKU_PASSKEY
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
           EOF
         env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_ACCESS_KEY }}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_PASSKEY }}
           HEROKU_EMAIL: ${{ secrets.HEROKU_MAIL }}
       - name: Add Heroku remote
         run: heroku git:remote --app $HEROKU_APP_NAME
