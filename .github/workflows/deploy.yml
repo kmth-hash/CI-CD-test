@@ -6,15 +6,11 @@ on:
 env:
   CI : false
 jobs:
-  deployment:
-    # Operating system to run job on
+  Deployment:
     runs-on: ubuntu-latest
-    # Steps in job
     steps:
-      # Get code from repo
       - name: Checkout code
         uses: actions/checkout@v2
-      # Install NodeJS
       - name: Install Node 14.x
         uses: actions/setup-node@v1
         with:
@@ -28,8 +24,7 @@ jobs:
       - name: Deploy to heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: 'ci-cd-001'
-          heroku_email: ${{ secrets.HEROKU_MAIL }}
-        env:
-          repo: ${{secrets.repoName}}
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "ci-cd-001"
+          heroku_email: ${{secrets.HEROKU_MAIL}}
+        
