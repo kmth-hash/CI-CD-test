@@ -3,8 +3,7 @@ name: workflow thread
 on:
   push:
     branches: [ "*" ]
-  pull_request:
-    branches: [ "master" ]
+  
 env:
   CI: false
 
@@ -16,8 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+        
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -28,9 +26,8 @@ jobs:
     - name : clean install
       run: npm ci
     - name : build project
-      run: npm build
+      run: npm run build
     - name : testing...
       run: npm test
-    # - name : starting...
-    # run: npm start
+    
      
